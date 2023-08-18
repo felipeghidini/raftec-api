@@ -22,8 +22,21 @@ class ClientController {
     response.json(client);
   }
 
-  store() {
+  async store(request, response) {
     // criar um novo registro
+    const { name, phone , adreess, residence_number, residence_type, complement, equipment, repair_date, next_repair, value, occurrence, service, neighborhood, observation } = request.body;
+
+    const clientExists = await ClientsRepository.findByName(name);
+
+    if (clientExists) {
+      return response.status(400).json({ error: 'Cliente já cadastrado com esse nome' });
+    }
+
+    const client = await ClientsRepository.create({
+      name, phone , adreess, residence_number, residence_type, complement, equipment, repair_date, next_repair, value, occurrence, service, neighborhood, observation
+    });
+
+    response.json(client)
   }
 
   update() {

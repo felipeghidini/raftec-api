@@ -8,7 +8,7 @@ let clients = [{
     residence_number: '180',
     residence_type: 'Apartamento',
     complement: 'Bloco 2 Apartamento 44',
-    equipament: 'Harman 2200',
+    equipment: 'Harman 2200',
     repair_date: '10/07/2023',
     next_repair: '10/07/2024',
     value: '120,00',
@@ -25,7 +25,7 @@ let clients = [{
     residence_number: '180',
     residence_type: 'Apartamento',
     complement: 'Bloco 2 Apartamento 44',
-    equipament: 'Harman 2200',
+    equipment: 'Harman 2200',
     repair_date: '10/07/2023',
     next_repair: '10/07/2024',
     value: '120,00',
@@ -50,10 +50,43 @@ class ClientsRepository {
     ));
   }
 
+  findByName(name) {
+    return new Promise((resolve) => resolve(
+      clients.find((client) => client.name === name),
+    ));
+  }
+
   delete(id) {
     return new Promise((resolve) => {
       clients = clients.filter((client) => client.id !== id);
       resolve()
+    });
+  }
+
+  create({
+    name, phone , adreess, residence_number, residence_type, complement, equipment, repair_date, next_repair, value, occurrence, service, neighborhood, observation
+  }) {
+    return new Promise((resolve) => {
+      const newClient = {
+        id: v4(),
+        name,
+        phone ,
+        adreess,
+        residence_number,
+        residence_type,
+        complement,
+        equipment,
+        repair_date,
+        next_repair,
+        value,
+        occurrence,
+        service,
+        neighborhood,
+        observation
+      };
+
+      clients.push(newClient);
+      resolve(newClient);
     });
   }
 }
