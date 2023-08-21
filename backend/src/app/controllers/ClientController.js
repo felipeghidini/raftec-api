@@ -28,6 +28,10 @@ class ClientController {
 
     const clientExists = await ClientsRepository.findByName(name);
 
+    if (!name) {
+      return response.status(400).json({ error: 'Nome é obrigatório' });
+    }
+
     if (clientExists) {
       return response.status(400).json({ error: 'Cliente já cadastrado com esse nome' });
     }
@@ -39,8 +43,33 @@ class ClientController {
     response.json(client)
   }
 
-  update() {
+  async update(request, response) {
     // Editar um registro
+    const { id } = request.params;
+
+    const {
+      name, phone , adreess, residence_number, residence_type, complement, equipment, repair_date, next_repair, value, occurrence, service, neighborhood, observation
+    } = request.body;
+
+    const clientExists = await ClientsRepository.findById(id);
+    if (!clientExists) {
+      return response.status(400).json({ error: 'Client Not Found' });
+    }
+
+    if (!name) {
+      return response.status(400).json({ error: 'Nome é obrigatório' });
+    }
+
+    const clientByPhone = await ClientsRepository.findByPhone(phone);
+    if (clientByPhone && clientByPhone.id != id) {
+      return response.status(400).json({ error: 'Este telefone já está em uso' })
+    }
+
+    const client = await ClientsRepository.update(id, {
+      name, phone , adreess, residence_number, residence_type, complement, equipment, repair_date, next_repair, value, occurrence, service, neighborhood, observation
+    });
+
+    response.json(client);
   }
 
   async delete(request, response) {

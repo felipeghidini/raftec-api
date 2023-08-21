@@ -56,6 +56,12 @@ class ClientsRepository {
     ));
   }
 
+  findByPhone(phone) {
+    return new Promise((resolve) => resolve(
+      clients.find((client) => client.phone === phone),
+    ))
+  }
+
   delete(id) {
     return new Promise((resolve) => {
       clients = clients.filter((client) => client.id !== id);
@@ -87,6 +93,36 @@ class ClientsRepository {
 
       clients.push(newClient);
       resolve(newClient);
+    });
+  }
+
+  update(id, {
+    name, phone, adreess, residence_number, residence_type, complement, equipment, repair_date, next_repair, value, occurrence, service, neighborhood, observation
+  }) {
+    return new Promise((resolve) => {
+      const updatedClient = {
+        id,
+        name,
+        phone ,
+        adreess,
+        residence_number,
+        residence_type,
+        complement,
+        equipment,
+        repair_date,
+        next_repair,
+        value,
+        occurrence,
+        service,
+        neighborhood,
+        observation
+      };
+
+      clients = clients.map((client) => (
+        client.id === id ? updatedClient : client
+      ));
+
+      resolve(updatedClient);
     });
   }
 }
